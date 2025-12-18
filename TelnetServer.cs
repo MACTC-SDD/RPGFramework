@@ -1,4 +1,5 @@
 ﻿using RPGFramework;
+using Spectre.Console;
 using System;
 using System.IO;
 using System.Net;
@@ -6,6 +7,7 @@ using System.Net.Sockets;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Spectre.Console;
 
 public class TelnetServer
 {
@@ -70,6 +72,13 @@ public class TelnetServer
            
 
             await player.Network.Writer.WriteLineAsync("MOTD");
+            var panel = new Panel("Welcome to the game!")
+            {
+                Header = new PanelHeader($"[bold yellow]Welcome[/]"),
+                Border = BoxBorder.Rounded
+            };
+
+            player.Console.Write(panel);
             Console.WriteLine("New client connected!");
 
             try

@@ -10,6 +10,7 @@ namespace RPGFramework.MapObjects
     {
         public int Id { get; set; } = 0;
         public Direction ExitDirection { get; set; }
+        public ExitType ExitType { get; set; } = ExitType.Open;
         public string Name { get; set; } = "";
         public string Description { get; set; } = "";
         public int SourceRoomId { get; set; }
@@ -34,6 +35,13 @@ namespace RPGFramework.MapObjects
             return GameState.Instance.Areas[areaId].Exits.Keys.Max() + 1;
             // Return one higher
         }
+    }
 
+    public enum ExitType
+    {
+        Open,
+        Door,
+        LockedDoor,
+        Impassable
     }
 }

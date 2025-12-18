@@ -20,7 +20,7 @@ namespace RPGFramework
         /// <returns></returns>
         public static bool CheckPermission(Player player, PlayerRole role)
         {
-            return player.Role >= role;
+            return player.PlayerRole >= role;
         }
     }
 }

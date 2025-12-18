@@ -98,6 +98,31 @@ namespace RPGFramework.MapObjects
         }
 
         /// <summary>
+        /// Delete a room (and its linked exits) from the specified area
+        /// </summary>
+        /// <param name="areaId"></param>
+        /// <param name="roomId"></param>
+        public static void DeleteRoom(int areaId, int roomId)
+        {
+            // Remove the room from the area
+            GameState.Instance.Areas[areaId].Rooms.Remove(roomId);
+
+            // Remove all exits from the room
+            List<Exit> exits = GameState.Instance.Areas[areaId].Exits.Values
+                .Where(e => e.SourceRoomId == roomId || e.DestinationRoomId == roomId).ToList();
+
+            foreach (Exit e in exits)
+            {
+                GameState.Instance.Areas[areaId].Exits.Remove(e.Id);
+            }
+        }
+
+        public static void DeleteRoom(Room room)
+        {
+            DeleteRoom(room.AreaId, room.Id);
+        }
+
+        /// <summary>
         /// Return a list of Exit objects that are in this room.
         /// </summary>
         /// <returns></returns>

@@ -19,15 +19,16 @@ namespace RPGFramework
 
         // Fields
         private bool _isRunning = false;
-        private Thread _saveThread;
-        private Thread _timeOfDayThread;
+        private Thread? _saveThread;
+        private Thread? _timeOfDayThread;
 
         #region --- Properties ---
 
         /// <summary>
         /// All Areas are loaded into this dictionary
         /// </summary>
-        [JsonIgnore] public Dictionary<int, Area> Areas { get; set; } = new Dictionary<int, Area>();
+        [JsonIgnore] public Dictionary<int, Area> Areas { get; set; } = 
+            new Dictionary<int, Area>();
 
         /// <summary>
         /// The date of the game world. This is used for time of day, etc.
@@ -42,6 +43,7 @@ namespace RPGFramework
         public int StartAreaId {  get; set; } = 0;
         public int StartRoomId {  get; set; } = 0;
         
+        public TelnetServer? TelnetServer { get; private set; }
 
         #endregion --- Properties ---
 
@@ -67,17 +69,17 @@ namespace RPGFramework
         }
 
         // Load all Area files from /data/areas. Each Area file will contain some basic info and lists of rooms and exits
-        private static void LoadAllAlreas()
+        private void LoadAllAreas()
         {
-            GameState.Instance.Areas.Clear();
+            Areas.Clear();
             List<Area> areas = ObjectStorage.LoadAllObjects<Area>("data/areas/");
             foreach (Area area in areas)
             {
-                GameState.Instance.Areas.Add(area.Id, area);
+                Areas.Add(area.Id, area);
                 Console.WriteLine($"Loaded area: {area.Name}");
             }
         }
-        private static void LoadAllPlayers()
+        private void LoadAllPlayers()
         {
             // Should we clear all first?
 
@@ -85,23 +87,23 @@ namespace RPGFramework
             List<Player> players = ObjectStorage.LoadAllObjects<Player>("data/players/");
             foreach (Player player in players)
             {
-                GameState.Instance.Players.Add(player.Name, player);
+                Players.Add(player.Name, player);
                 Console.WriteLine($"Loaded player: {player.Name}");
             }
         }
 
-        private static void SaveAllAreas()
+        private void SaveAllAreas()
         {
-            foreach(Area a in GameState.Instance.Areas.Values)
+            foreach(Area a in Areas.Values)
             {
                 ObjectStorage.SaveObject(a, "data/areas/", $"{a.Name}.xml");
                 Console.WriteLine($"Saved area: {a.Name}");
             }
         }
 
-        private static void SaveAllPlayers(bool includeOffline = false)
+        private void SaveAllPlayers(bool includeOffline = false)
         {
-            foreach (Player player in GameState.Instance.Players.Values)
+            foreach (Player player in Players.Values)
             {
                 if (player.IsOnline || includeOffline)
                 {
@@ -111,16 +113,18 @@ namespace RPGFramework
             }
         }
 
-        public static void SavePlayer(Player p)
+        public void SavePlayer(Player p)
         {
             ObjectStorage.SaveObject(p, "data/players/", $"{p.Name}.xml");
         }
 
-        public void Start()
+        public async Task Start()
         {
-            _isRunning = true;
-            LoadAllAlreas();
+            LoadAllAreas();
             LoadAllPlayers();
+
+            this.TelnetServer = new TelnetServer(5555);
+            await this.TelnetServer.StartAsync();
 
             /* We may want to do this to bootstrap a starting area/room if none are available to be loaded.
             //Area startArea = new Area() { Id = 0, Name = "Void Area", Description = "Start Area" };
@@ -148,6 +152,7 @@ namespace RPGFramework
             // NPC threads?
             // Room threads?
 
+            _isRunning = true;
         }
 
         #endregion --- Methods ---

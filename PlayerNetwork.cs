@@ -18,8 +18,8 @@ namespace RPGFramework
             Client = client;
            
             NetworkStream stream = client.GetStream();
-            Writer = new StreamWriter(stream, Encoding.ASCII) { AutoFlush = true };
-            Reader = new StreamReader(stream, Encoding.ASCII);
+            Writer = new StreamWriter(stream, Encoding.UTF8) { AutoFlush = true };
+            Reader = new StreamReader(stream, Encoding.UTF8);
         }
     }
 }

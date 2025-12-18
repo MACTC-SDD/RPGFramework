@@ -7,7 +7,7 @@ using RPGFramework.MapObjects;
 
 namespace RPGFramework
 {
-    // Probably abstratt
+    // Probably abstrctt
     // This is meant to hold all of the commmon elements for
     // players, NPCs, etc.
     public class Character
@@ -15,11 +15,24 @@ namespace RPGFramework
         public bool Alive { get; set; } = true;
         public int AreaId { get; set; } = 0;
         public int Gold { get; set; } = 0;
-        public double Health { get; set; } = 0;
+        public int Health { get; set; } = 0;
+        public int Level { get; set; } = 1;
         public int LocationId { get; set; } = 0;
-        public double MaxHealth { get; set; } = 0;
+        public int MaxHealth { get; set; } = 0;
         public string Name { get; set; } = "";
         public int XP { get; set; } = 0;
+
+        // --- Skill Attributes ---
+        public int Strength { get; set; } = 0;
+        public int Dexterity { get; set; } = 0;
+        public int Constitution { get; set; } = 0;
+        public int Intelligence { get; set; } = 0;
+        public int Wisdom { get; set; } = 0;
+        public int Charisma { get; set; } = 0;
+
+        // --- Custom objects, move these to the main attributes list later ---
+        public CharacterClass Class { get; set; } = new CharacterClass();
+        public List<Armor> EquippedArmor { get; set; } = new List<Armor>();
         public Weapon PrimaryWeapon { get; set; }
 
         public Character()
@@ -40,7 +53,7 @@ namespace RPGFramework
         }
 
         // Set Health to a specific value
-        public void SetHealth(double health)
+        public void SetHealth(int health)
         {
             // Doesn't make sense if player is dead
             if (Alive == false)
@@ -70,13 +83,13 @@ namespace RPGFramework
         }
 
         // Remove some amount from health
-        public void TakeDamage(double damage)
+        public void TakeDamage(int damage)
         {
             SetHealth(Health - damage);
         }
 
         // Add some amount to health
-        public void Heal(double heal)
+        public void Heal(int heal)
         {
             SetHealth(Health + heal);
         }

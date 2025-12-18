@@ -6,18 +6,23 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Spectre.Console;
 
 namespace RPGFramework
 {
     public class Player : Character
     {
+        // Things to not save (don't serialize)
         [JsonIgnore]
-        public PlayerNetwork Network { get; set; }
+        public PlayerNetwork? Network { get; set; }
         [JsonIgnore]
-        public bool IsOnline { get; set; } 
+        public bool IsOnline { get; set; }
+        [JsonIgnore]
+        public IAnsiConsole Console { get; set; }
+
         public DateTime LastLogin { get; set; }
         public TimeSpan PlayTime { get; set; } = new TimeSpan();
-        public PlayerRole Role { get; set; } = PlayerRole.Player;
+        public PlayerRole PlayerRole { get; set; } = PlayerRole.Player;
 
         // Constructor (creates a new player)
         // Review how this is handled in TelnetServer, might not need this anymore
@@ -25,6 +30,7 @@ namespace RPGFramework
         public Player(TcpClient client, string name)
         {
             Network = new PlayerNetwork(client);
+            Console = CreateAnsiConsole();
             LocationId = GameState.Instance.Areas[GameState.Instance.StartAreaId].Rooms[GameState.Instance.StartRoomId].Id;
             Name = name;
         }
@@ -32,9 +38,28 @@ namespace RPGFramework
         public Player()
         { }
 
+        private IAnsiConsole CreateAnsiConsole()
+        {
+            if (Network == null)
+                throw new InvalidOperationException("No network connection.");
+
+            var output = new AnsiConsoleOutput(Network.Writer);
+
+            var settings = new AnsiConsoleSettings
+            {
+                Ansi = AnsiSupport.Yes,
+                Out = output,
+                Interactive = InteractionSupport.No
+            };
+
+            return AnsiConsole.Create(settings);
+        }
         // This is just for convenience since it's kind of buried in the Network object
         public string GetIPAddress()
         {
+            if (Network == null || Network.Client.Client.RemoteEndPoint == null)
+                return "Disconnected";
+
             return ((System.Net.IPEndPoint)Network.Client.Client.RemoteEndPoint).Address.ToString();
         }
 
@@ -57,7 +82,7 @@ namespace RPGFramework
             Save();
 
             WriteLine("Bye!");
-            Network.Client.Close();
+            Network?.Client.Close();
         }
 
         /// <summary>
@@ -65,14 +90,14 @@ namespace RPGFramework
         /// </summary>
         private void Save()
         {
-            GameState.SavePlayer(this);
+            GameState.Instance.SavePlayer(this);
         }
 
         // This is just for convenience, we could access the Network.Writer directly
         // Should this be done throught the Comm class instead so it's all in one place?
         public void WriteLine(string message)
         {
-            Network.Writer.WriteLine(message);
+            Network?.Writer.WriteLine(message);
         }
     }
 

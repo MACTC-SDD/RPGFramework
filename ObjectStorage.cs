@@ -62,6 +62,7 @@ namespace RPGFramework
             foreach (string file in Directory.EnumerateFiles(path))
             {
                 string jsonString = File.ReadAllText(file);
+                Console.WriteLine(jsonString);
                 objects.Add(JsonSerializer.Deserialize<T>(jsonString));
             }
 
