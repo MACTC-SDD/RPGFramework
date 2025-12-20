@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RPGFramework.MapObjects
+using RPGFramework.MapObjects;
+
+namespace RPGFramework.Command
 {
-    public class Builder
+    public class BuilderCommand
     {
         public static bool ProcessCommand(Character character, List<string> parameters)
         {

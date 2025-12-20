@@ -11,44 +11,6 @@ namespace RPGFramework.MapObjects
     /// </summary>
     public class Navigation
     {
-        /// <summary>
-        /// We'll use Character instead of Player so that we can use the same commands for NPCs.
-        /// </summary>
-        /// <param name="character"></param>
-        /// <param name="command"></param>
-        /// <returns>Returns true if a command was matched.</returns>
-        public static bool ProcessCommand(Character character, List<string> parameters)
-        {            
-            switch (parameters[0].ToLower())
-            {
-                case "n":
-                case "north":
-                    Move(character, Direction.North);
-                    return true;
-                case "e":
-                case "east":
-                    Move(character, Direction.East);
-                    return true;
-                case "s":
-                case "south":
-                    Move(character, Direction.South);
-                    return true;
-                case "w":
-                case "west":
-                    Move(character, Direction.West);
-                    return true;
-                case "u":
-                case "up":
-                    Move(character, Direction.Up);
-                    return true;
-                case "d":
-                case "down":
-                    Move(character, Direction.Down);
-                    return true;
-            }
-
-            return false;
-        }
 
         /// <summary>
         /// Move the character in the specified direction if possible, otherwise, send error.

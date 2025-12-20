@@ -7,7 +7,9 @@ using System.Net.Sockets;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using Spectre.Console;
+
+using RPGFramework.Display;
+using RPGFramework.Command;
 
 public class TelnetServer
 {
@@ -38,7 +40,7 @@ public class TelnetServer
         using (client)
         {
 
-            // TODO: Handle Login
+            // TODO: Handle Login (Authentication)
             // Populate player object and attach to client
 
             // Loop here until player name is entered
@@ -55,32 +57,28 @@ public class TelnetServer
             
             Player player;
 
+            // If existing player
             if (GameState.Instance.Players.ContainsKey(playerName))
             {
                 player = GameState.Instance.Players[playerName];
-
             }
             else
             {
+                // TODO: New player creation (class, etc)
                 player = new Player(client, playerName);
                 GameState.Instance.AddPlayer(player);
             }
 
             player.Network = pn;
-            player.IsOnline = true;
-            player.LastLogin = DateTime.Now;
+            player.Login();
            
 
             await player.Network.Writer.WriteLineAsync("MOTD");
-            var panel = new Panel("Welcome to the game!")
-            {
-                Header = new PanelHeader($"[bold yellow]Welcome[/]"),
-                Border = BoxBorder.Rounded
-            };
+            player.Write(RPGPanel.GetPanel("Welcome to the game!", "Welcome!"));
 
-            player.Console.Write(panel);
             Console.WriteLine("New client connected!");
 
+            // Listen for and process commands
             try
             {
                 while (client.Connected)

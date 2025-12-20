@@ -1,21 +1,21 @@
-﻿using RPGFramework.MapObjects;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace RPGFramework
+namespace RPGFramework.Command
 {
     // A class for processing commands
     // We'll start simple and expand on this later
-    internal class Command
+    public class Command
     {
 
         // Process a command from a player or character (NPC)
         // Although the other methods could be called directly, it's better to have a single
-        // entry point for all commands. It's probably a good idea for us to make those methods private for clarity.
+        // entry point for all commands. It's probably a good idea for us to make those
+        // methods private for clarity.
         public static void Process(Character character, string command)
         {
             // This is broken into multiple parts
@@ -24,9 +24,10 @@ namespace RPGFramework
 
             List<string> parameters = ParseCommand(command);
 
-            bool cmdExecuted = ProcessCommand(character, parameters);
-            cmdExecuted = cmdExecuted || Navigation.ProcessCommand(character, parameters);
-            cmdExecuted = cmdExecuted || Builder.ProcessCommand(character, parameters);
+            // Because || short circuits, as soon as the command is executed, we'll stop
+            bool cmdExecuted = ProcessCommand(character, parameters)
+                || NavigationCommand.ProcessCommand(character, parameters)
+                || BuilderCommand.ProcessCommand(character, parameters);
 
             // Unknown command
             if (!cmdExecuted)
