@@ -3,20 +3,26 @@ using RPGFramework.Geography;
 
 namespace RPGFramework
 {
-    // Probably abstrctt
-    // This is meant to hold all of the commmon elements for
-    // players, NPCs, etc.
-    internal class Character
+    /// <summary>
+    /// Represents a base character in the game, providing common properties and functionality for players, non-player
+    /// characters (NPCs), and other entities.
+    /// </summary>
+    /// <remarks>This abstract class defines shared attributes such as health, level, skills, equipment, and
+    /// location for all character types. Derived classes should implement specific behaviors and additional properties
+    /// as needed. The class enforces valid ranges for skill attributes and manages health and alive status. Instances
+    /// of this class are not created directly; instead, use a concrete subclass representing a specific character
+    /// type.</remarks>
+    internal abstract class Character
     {
         public bool Alive { get; set; } = true;
         public int AreaId { get; set; } = 0;
         public int Gold { get; set; } = 0;
-        public int Health { get; set; } = 0;
-        public int Level { get; set; } = 1;
+        public int Health { get; protected set; } = 0;
+        public int Level { get; protected set; } = 1;
         public int LocationId { get; set; } = 0;
-        public int MaxHealth { get; set; } = 0;
+        public int MaxHealth { get; protected set; } = 0;
         public string Name { get; set; } = "";
-        public int XP { get; set; } = 0;
+        public int XP { get; protected set; } = 0;
 
         // --- Skill Attributes --- (0-20)
         public int Strength { get; private set { field = Math.Clamp(value, 0, 20); } } = 0;

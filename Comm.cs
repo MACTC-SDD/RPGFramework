@@ -58,7 +58,7 @@ namespace RPGFramework
         /// <param name="speaker"></param>
         public static void RoomSay(Room room, string message, Character speaker)
         {
-            SendToRoomExcept(room, message, speaker);
+            SendToRoomExcept(room, $"{speaker.Name} says '{message}'", speaker);
 
             if (speaker is Player) ((Player)speaker).WriteLine($"You say, '{message}'");                           
         }
