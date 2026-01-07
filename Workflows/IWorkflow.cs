@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RPGFramework.Engine
+namespace RPGFramework.Workflows
 {
     internal interface IWorkflow
     {

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using RPGFramework.Engine;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RPGFramework.Engine
+namespace RPGFramework.Workflows
 {
     internal class WorkflowOnboarding : IWorkflow
     {
@@ -12,16 +13,17 @@ namespace RPGFramework.Engine
         public Dictionary<string, object> WorkflowData { get; set; } = new Dictionary<string, object>();
         public void Execute(Player player, List<string> parameters)
         {
-            // Implementation of onboarding steps would go here.
-            // This could include introducing game mechanics, character creation, etc.
-            // For now, this is a placeholder.
-            // Steps:
             // 1. We'll assume we didn't get here if player exists, if they did that will have authenticated instead
             // 2. Gather player class
             // 3. Roll stats and loop until accepted
             // 4. Introduce basic commands
 
-            // TODO: Rather than this giant switch statement , consider breaking each step into its own method for clarity and maintainability.
+            // TODO: Rather than this giant switch statement , consider breaking each step
+            // into its own method for clarity and maintainability.
+            // TODO: Determine what happens if player logs out while workflow is active?
+            //   Should Logout/Disconnect check for workflow? Should Workflow have a Rollback method?
+            //   Or, should we Serialize Workflow with Player, at least for onboarding. Might be confusing.
+
             // The action we take will depend on the CurrentStep, we will store progress in WorkflowData
             switch (CurrentStep)
             {
@@ -74,6 +76,7 @@ namespace RPGFramework.Engine
                     break;
                 default:
                     // Onboarding complete
+                    // TODO: Set PlayerClass (or maybe do that in step above) and save Player
                     player.WriteLine(Name + ": Onboarding complete! You are now ready to explore the game world.");
                     player.WriteLine("Your class is: " + WorkflowData["ChosenClass"]);
                     player.WriteLine("Type 'help' to see a list of available commands.");
