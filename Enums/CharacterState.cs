@@ -5,6 +5,7 @@
         Idle,
         Moving,
         Attacking,
+        InShop,
         Dead
     }
 }
