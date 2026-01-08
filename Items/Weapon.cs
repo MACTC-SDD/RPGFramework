@@ -3,8 +3,49 @@ namespace RPGFramework
 {
     internal class Weapon : Item
     {
-        public double Damage { get; set; } = 0;
+        public double onehandDamage { get; set; } = 0;
 
+        public double AttackTime { get; set; } = 1.0;
+
+        public required string name { get; set; }
+
+        public double twohandDamage { get; set; }
+
+        public double heavyAttack {  get; set; }
+
+        public double LightAttack { get; set; }
+
+        public double Range { get; set; }
+
+        public double Abilies { get; set; }
+
+        public WeaponType Type { get; set; }
+
+        public WeaponMaterial Material { get; set; }
+        internal enum WeaponType
+        {
+            Sword,
+            Axe,
+            Mace,
+            staff,
+            Wands,
+            Dagger,
+            Spear,
+            Bow,
+            Magicbook,
+            shield,
+            crossbow,
+        }
+
+        internal enum WeaponMaterial
+        {
+            Wood,
+            stone,
+            Iron,
+            Steel,
+            Mythril,
+            Obsidian
+        }
         // TODO
         // Add attack properties (damage, speed, etc.)
         // Implement attack methods
