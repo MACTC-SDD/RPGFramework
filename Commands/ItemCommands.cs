@@ -13,7 +13,7 @@ namespace RPGFramework.Commands
             return new List<ICommand>
             {
                 new ListInventoryCommand(),
-
+                
                 // Add more builder commands here as needed
             };
         }
