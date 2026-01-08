@@ -46,17 +46,8 @@ namespace RPGFramework
         public int GetAgressionLevel(){return CurrentAgressionLevel;}
 
         //returns the two different descriptions
-        public int GetShortDescription() { return ShortDescription; }
-        public int GetLongDescription() { return LongDescription; }
+        public string GetShortDescription() { return ShortDescription; }
+        public string GetLongDescription() { return LongDescription; }
+        
     }
 }
-        
-/*    
- Notes:
--Random NPC generation can be added later
--Spawn limit?
--behavior rules
--What does he mean by make a dictionary in GameState?
--Should there be subclasses of Mob for region specific stuff
--Turning NPC into a mob?
- */
