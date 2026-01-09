@@ -1,5 +1,6 @@
 ﻿
 using RPGFramework.Geography;
+using RPGFramework.Items;
 
 namespace RPGFramework
 {
@@ -27,6 +28,7 @@ namespace RPGFramework
         public CharacterClass Class { get; set; } = new CharacterClass();
         public List<Armor> EquippedArmor { get; set; } = new List<Armor>();
         public Weapon PrimaryWeapon { get; set; }
+        public Inventory PlayerInventory { get; set; } = new Inventory(); 
         #endregion
 
         #region --- Skill Attributes --- (0-20)

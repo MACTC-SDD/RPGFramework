@@ -29,8 +29,12 @@ namespace RPGFramework.Commands
             {
                 return false;
             }
-            player.WriteLine("");
-                return true;
+            player.WriteLine("Inventory:");
+            for (int i = 0; i < 16; i++)
+            {
+                player.WriteLine($"Slot {i}: ");
+            }
+            return true;
         }
     }
 }

@@ -1,5 +1,6 @@
-﻿
+﻿using RPGFramework.Enums;
 namespace RPGFramework
+
 {
     internal class Weapon : Item
     {
