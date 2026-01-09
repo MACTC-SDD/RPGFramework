@@ -5,6 +5,7 @@ using Spectre.Console;
 using RPGFramework;
 using RPGFramework.Display;
 using RPGFramework.Commands;
+using RPGFramework.Enums;
 using RPGFramework.Geography;
 using RPGFramework.Workflows;
 
@@ -23,7 +24,7 @@ internal class TelnetServer
     {
         _listener.Start();
         _isRunning = true;
-        Console.WriteLine("Telnet Server is running...");
+        GameState.Log(DebugLevel.Alert, "Telnet Server is running...");
 
         while (_isRunning && GameState.Instance.IsRunning)
         {
@@ -32,6 +33,7 @@ internal class TelnetServer
         }
 
         Console.WriteLine("Telnet Server is stopped...");
+        GameState.Log(DebugLevel.Alert, "Shutting down Telnet Server...");
         _listener.Stop();
     }
 
