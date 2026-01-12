@@ -17,7 +17,6 @@ namespace RPGFramework
            
             NetworkStream stream = client.GetStream();
 
-            // TODO: Test if emojis work without UTF8
             Writer = new StreamWriter(stream, new UTF8Encoding(false))
             {
                 AutoFlush = true,
