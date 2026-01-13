@@ -3,6 +3,9 @@ namespace RPGFramework.Enums
 {
     internal enum WeaponType
     {
-        Sword,
+        Melee,
+        Ranged,
+        Magic,
+
     }
 }
