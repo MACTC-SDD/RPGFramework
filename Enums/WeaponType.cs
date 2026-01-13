@@ -50,5 +50,4 @@ namespace RPGFramework.Enums
         Heavy
     }
 }
-    }
-}
+    

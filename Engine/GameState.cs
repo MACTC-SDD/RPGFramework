@@ -55,9 +55,6 @@ namespace RPGFramework
         /// All Players are loaded into this dictionary, with the player's name as the key 
         /// </summary>
         [JsonIgnore] public Dictionary<string, Player> Players { get; set; } = new Dictionary<string, Player>();
-        [JsonIgnore] public Dictionary<int, Item> ItemCatalog { get; set; } = new Dictionary<int, Item>();
-        [JsonIgnore] public Dictionary<int, Armor> ArmorCatalog { get; set; } = new Dictionary<int, Armor>();
-        [JsonIgnore] public Dictionary<int, Weapon> WeaponCatalog { get; set; } = new Dictionary<int, Weapon>();
 
         [JsonIgnore] public Dictionary<string, Item> ItemCatalog { get; set; } = new Dictionary<string, Item>();
         [JsonIgnore] public Dictionary<string, Weapon> WeaponCatalog { get; set; } = new Dictionary<string, Weapon>();
@@ -144,13 +141,29 @@ namespace RPGFramework
 
         private async Task LoadAllCatalogs()
         {
+            // Load Items
             ItemCatalog.Clear();
-            var items = await Persistence.LoadItemsAsync();
-            foreach ( var kvp in items)
+
+            try
             {
-                ItemCatalog.Add(kvp.Key, kvp.Value);
+                var items = await Persistence.LoadItemsAsync();
+                foreach (var kvp in items)
+                {
+                    ItemCatalog.Add(kvp.Key, kvp.Value);
+                }
+
+                GameState.Log(DebugLevel.Alert, $"{ItemCatalog.Count} items loaded.");
+
             }
-            GameState.Log(DebugLevel.Alert, $"{ItemCatalog.Count} items loaded.");
+            catch (FileNotFoundException fex)
+            {
+                GameState.Log(DebugLevel.Warning, $"Item catalog file not found, creating blank.");                
+            }
+
+            // Load Weapons
+
+            // Load Armor
+            
         }
 
         /// <summary>
