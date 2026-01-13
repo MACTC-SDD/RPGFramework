@@ -160,7 +160,7 @@ namespace RPGFramework.Commands
     }
     internal class ArmorBuildCommand : ICommand
     {
-        public string Name => "/Armor";
+        public string Name => "/armor";
 
         public IEnumerable<string> Aliases => Array.Empty<string>();
 
@@ -293,13 +293,13 @@ namespace RPGFramework.Commands
             switch (parameters[1].ToLower())
             {
                 case "description":
-                    ArmorSetDescription(player, parameters);
+                    WeaponSetDescription(player, parameters);
                     break;
                 case "name":
-                    ArmorSetName(player, parameters);
+                    WeaponSetName(player, parameters);
                     break;
                 case "create":
-                    ArmorCreate(player, parameters);
+                    WeaponCreate(player, parameters);
                     break;
                 default:
                     WriteUsage(player);
@@ -312,12 +312,12 @@ namespace RPGFramework.Commands
         private static void WriteUsage(Player player)
         {
             player.WriteLine("Usage: ");
-            player.WriteLine("/armor description '<set item desc to this>'");
-            player.WriteLine("/armor name '<set item name to this>'");
-            player.WriteLine("/armor create '<name>' '<description>''");
+            player.WriteLine("/weapon description '<set item desc to this>'");
+            player.WriteLine("/weapon name '<set item name to this>'");
+            player.WriteLine("/weapon create '<name>' '<description>''");
         }
 
-        private static void ArmorCreate(Player player, List<string> parameters)
+        private static void WeaponCreate(Player player, List<string> parameters)
         {
             if (!Utility.CheckPermission(player, PlayerRole.Admin))
             {
@@ -335,18 +335,18 @@ namespace RPGFramework.Commands
                 player.WriteLine("Usage: /armor create '<name>' '<description>'");
                 return;
             }
-            Armor newArmor = new Armor
+            Weapon newWeapon = new Weapon
             {
                 Name = parameters[2],
                 Description = parameters[3]
             };
 
             // Here you would typically add the item to a database or game world
-            player.WriteLine($"Armor '{newArmor.Name}' created successfully with description: {newArmor.Description}");
+            player.WriteLine($"Weapon '{newWeapon.Name}' created successfully with description: {newWeapon.Description}");
 
         }
 
-        private static void ArmorSetDescription(Player player, List<string> parameters)
+        private static void WeaponSetDescription(Player player, List<string> parameters)
         {
             if (!Utility.CheckPermission(player, PlayerRole.Admin))
             {
@@ -356,26 +356,26 @@ namespace RPGFramework.Commands
 
             if (parameters.Count < 3)
             {
-                //player.WriteLine(player.GetArmor().Description);
+                //player.WriteLine(player.GetWeapon().Description);
             }
             else
             {
-                //player.GetArmor().Description = parameters[2];
-                player.WriteLine("Armor description set.");
+                //player.GetWeapon().Description = parameters[2];
+                player.WriteLine("Weapon description set.");
             }
         }
 
-        private static void ArmorSetName(Player player, List<string> parameters)
+        private static void WeaponSetName(Player player, List<string> parameters)
         {
 
             if (parameters.Count < 3)
             {
-                // player.WriteLine(player.GetArmor().Name);
+                // player.WriteLine(player.GetWeapon().Name);
             }
             else
             {
-                //player.GetArmor().Name = parameters[2];
-                player.WriteLine("Armor name set.");
+                //player.GetWeapon().Name = parameters[2];
+                player.WriteLine("Weapon name set.");
             }
         }
 
