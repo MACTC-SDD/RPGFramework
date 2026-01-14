@@ -155,15 +155,46 @@ namespace RPGFramework
                 GameState.Log(DebugLevel.Alert, $"{ItemCatalog.Count} items loaded.");
 
             }
-            catch (FileNotFoundException fex)
+            catch (FileNotFoundException)
             {
                 GameState.Log(DebugLevel.Warning, $"Item catalog file not found, creating blank.");                
             }
-
             // Load Weapons
+            ArmorCatalog.Clear();
 
+            try
+            {
+                var armor = await Persistence.LoadArmorAsync();
+                foreach (var kvp in armor)
+                {
+                    ArmorCatalog.Add(kvp.Key, kvp.Value);
+                }
+
+                GameState.Log(DebugLevel.Alert, $"{ArmorCatalog.Count} armor loaded.");
+
+            }
+            catch (FileNotFoundException)
+            {
+                GameState.Log(DebugLevel.Warning, $"Armor catalog file not found, creating blank.");
+            }
             // Load Armor
-            
+            WeaponCatalog.Clear();
+
+            try
+            {
+                var weapons = await Persistence.LoadWeaponsAsync();
+                foreach (var kvp in weapons)
+                {
+                    WeaponCatalog.Add(kvp.Key, kvp.Value);
+                }
+
+                GameState.Log(DebugLevel.Alert, $"{WeaponCatalog.Count} weapons loaded.");
+
+            }
+            catch (FileNotFoundException)
+            {
+                GameState.Log(DebugLevel.Warning, $"Weapon catalog file not found, creating blank.");
+            }
         }
 
         /// <summary>
