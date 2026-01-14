@@ -45,6 +45,12 @@ namespace RPGFramework.Commands
                 case "delete":
                     MobDelete(player, parameters);
                     break;
+                case "set":
+                    if (parameters[2] == "name")
+                    {
+                        SetMobName(player, parameters);
+                    }
+                    break;
                 default:
                     WriteUsage(player);
                     break;
@@ -90,7 +96,7 @@ namespace RPGFramework.Commands
                     GameState.Instance.Mobs.Add(m.Name, m);
                 }
 
-                    player.WriteLine("Mob created.");
+                player.WriteLine("Mob created.");
             }
             catch (Exception ex)
             {
@@ -101,8 +107,7 @@ namespace RPGFramework.Commands
         private static void WriteUsage(Player player)
         {
             player.WriteLine("Usage: ");
-            player.WriteLine("/mob description '<set mob>'");
-            player.WriteLine("/mob name '<set mob name to this>'");
+            player.WriteLine("/mob set '<name>' '<NewName>'");
             player.WriteLine("/mob create '<name>' '<description>'");
             player.WriteLine("/mob delete '<name>'");
         }
@@ -125,6 +130,24 @@ namespace RPGFramework.Commands
             {
                 player.WriteLine("A mob with that name doesn't exist.");
             }
+        }
+        private static void SetMobName(Player player, List<string> parameters)
+        {
+            if (!Utility.CheckPermission(player, PlayerRole.Admin))
+            {
+                player.WriteLine("You do not have permission to do that.");
+                player.WriteLine("Your Role is: " + player.PlayerRole.ToString());
+                return;
+            }
+
+            Mob temp = GameState.Instance.Mobs[parameters[2]];
+            temp.Name = parameters[3];
+
+            GameState.Instance.Mobs.Remove(parameters[2]);
+
+            GameState.Instance.Mobs.Add(parameters[3], temp);
+
+
         }
     }
 }
