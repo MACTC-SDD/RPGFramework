@@ -109,7 +109,11 @@ namespace RPGFramework
         {
             SetHealth(Health + heal);
         }
-        public void SetDescription(string Desc) { Description = Desc; }
+
+        // CODE REVIEW: Shelton - PR #18
+        // There is really no reason to be a method, you can just set the property directly.
+        // I commented it out and you can just delete this comment once you've reviewed.
+        //public void SetDescription(string Desc) { Description = Desc; }
 
         internal void ApplyBleed(double bleedDamagePerSecond, int bleedDuration)
         {
