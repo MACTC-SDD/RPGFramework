@@ -1,6 +1,7 @@
 ﻿
 using RPGFramework.Enums;
 using RPGFramework.Geography;
+using RPGFramework.Interfaces;
 
 namespace RPGFramework.Commands
 {
@@ -102,7 +103,7 @@ namespace RPGFramework.Commands
             catch (Exception ex)
             {
                 player.WriteLine($"Error creating room: {ex.Message}");
-                player.WriteLine(ex.StackTrace);
+                player.WriteLine(ex.StackTrace ?? "");
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿
 using RPGFramework.Enums;
+using RPGFramework.Interfaces;
 using RPGFramework.Geography;
 
 namespace RPGFramework.Commands

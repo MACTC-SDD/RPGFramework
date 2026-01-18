@@ -1,5 +1,6 @@
 ﻿
 using RPGFramework.Display;
+using RPGFramework.Interfaces;
 
 namespace RPGFramework.Commands
 {

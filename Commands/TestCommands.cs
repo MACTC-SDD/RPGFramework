@@ -1,4 +1,6 @@
-﻿namespace RPGFramework.Commands
+﻿using RPGFramework.Interfaces;
+
+namespace RPGFramework.Commands
 {
     internal class TestCommands
     {

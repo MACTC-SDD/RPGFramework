@@ -1,4 +1,6 @@
 ﻿
+using RPGFramework.Interfaces;
+
 namespace RPGFramework.Commands
 {
     internal class CommunicationCommands

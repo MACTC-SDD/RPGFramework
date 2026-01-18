@@ -1,7 +1,5 @@
 ﻿using RPGFramework.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using RPGFramework.Interfaces;
 
 namespace RPGFramework.Workflows
 {
@@ -10,6 +8,8 @@ namespace RPGFramework.Workflows
         public int CurrentStep { get; set; } = 0;
         public string Description => "Guides new players through the initial setup and familiarization with the game mechanics.";
         public string Name => "Onboarding Workflow";
+        public List<ICommand> PreProcessCommands { get; } = [];
+        public List<ICommand> PostProcessCommands { get; } = [];
         public Dictionary<string, object> WorkflowData { get; set; } = new Dictionary<string, object>();
         public void Execute(Player player, List<string> parameters)
         {

@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using RPGFramework.Enums;
 using RPGFramework.Geography;
+using RPGFramework.Interfaces;
 using RPGFramework.Persistence;
 
 namespace RPGFramework

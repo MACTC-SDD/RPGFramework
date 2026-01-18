@@ -1,4 +1,5 @@
 ﻿using RPGFramework.Display;
+using RPGFramework.Interfaces;
 using Spectre.Console;
 
 namespace RPGFramework.Commands
