@@ -1,5 +1,5 @@
-﻿using System.IO;
-using RPGFramework.Geography;
+﻿using RPGFramework.Geography;
+using RPGFramework.Interfaces;
 
 namespace RPGFramework.Persistence
 {

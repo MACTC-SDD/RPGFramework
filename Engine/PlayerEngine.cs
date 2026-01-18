@@ -1,7 +1,7 @@
-﻿using RPGFramework.Workflows;
-using Spectre.Console;
+﻿using Spectre.Console;
 using System.Net.Sockets;
 using System.Text.Json.Serialization;
+using RPGFramework.Interfaces;
 
 namespace RPGFramework
 {

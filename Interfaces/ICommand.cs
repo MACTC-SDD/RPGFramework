@@ -1,5 +1,5 @@
 ﻿
-namespace RPGFramework.Commands
+namespace RPGFramework.Interfaces
 {
     internal interface ICommand
     {

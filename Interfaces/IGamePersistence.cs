@@ -1,6 +1,6 @@
 ﻿using RPGFramework.Geography;
 
-namespace RPGFramework.Persistence
+namespace RPGFramework.Interfaces
 {
     /// <summary>
     /// This will let us create different persistence mechanisms (e.g., file-based, database-based, etc.)
