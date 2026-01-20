@@ -1,33 +1,10 @@
-﻿Builder commands
-Review /room and consider using "create room" and "modify room" commands for room creation and modification.
-Create Room "RoomName" Direction
-Modify Room
-  Display (Short name)
-  Description (can embed optional description based on criteria)
-    <Time Of Day>
-        Morning: "The sun is rising over the hills."
-        Afternoon: "The sun is high in the sky."
-        Evening: "The sky is painted with hues of orange and pink."
-        Night: "The stars twinkle in the dark sky."
-    <Weather Condition>
-        Sunny: "The warm sun bathes the room in light."
-        Rainy: "Raindrops patter against the windows."
-        Snowy: "A blanket of snow covers the ground outside."
-        Windy: "The wind howls softly through the trees."
-    <Effects> - 
-        Holiday: "Festive decorations adorn the room."
-        Haunted: "An eerie feeling lingers in the air."
-        Cozy: "A warm fireplace crackles in the corner."
-        Abandoned: "Dust and cobwebs cover the furniture."
-    Behaviors (special effects room has) - MAYBE
-        NoMagic: "Magic does not function in this room."
-        SafeZone: "Players cannot engage in combat here."
-        Healing: "Players slowly regain health while in this room."
+﻿Commands that create things:
+/room, /exit, /area, /item, /weapon, /armor, /mob, /shop, etc.
 
-Link Area#Room Direction - Links the specified room in the specified direction.
+Each of these commands should have the following features:
+create (make a new object of that type)
+set (set properties of the object)
+delete (remove the object)
+list (list all objects of that type)
+help (provide help information about the command)
 
-Destroy Area#Room
-
-Item Commands (Haven't created these yet, but they are planned)
-Create Item
-Destroy Item Command - Destroys the specified item
