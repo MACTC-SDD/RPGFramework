@@ -26,7 +26,6 @@ namespace RPGFramework
         // The persistence mechanism to use. Default is JSON-based persistence.
         public static IGamePersistence Persistence { get; set; } = new JsonGamePersistence();
 
-        public bool IsRunning { get; private set; } = false;
 
         #region --- Properties ---
 
@@ -38,11 +37,30 @@ namespace RPGFramework
 
         #endregion
 
+        #region Unserialized Properties
+        [JsonIgnore] public bool IsRunning { get; private set; } = false;
+
         /// <summary>
         /// All Areas are loaded into this dictionary
         /// </summary>
-        [JsonIgnore] public Dictionary<int, Area> Areas { get; set; } =
-            new Dictionary<int, Area>();
+        [JsonIgnore] public Dictionary<int, Area> Areas { get; set; } = [];
+        
+        /// <summary>
+        /// All Players are loaded into this dictionary, with the player's name as the key 
+        /// </summary>
+        [JsonIgnore] public Dictionary<string, Player> Players { get; set; } = [];
+
+        [JsonIgnore] public TelnetServer? TelnetServer { get; private set; }
+
+        [JsonIgnore] public List<ICatalog> Catalogs { get; private set; } = [];
+
+        // Catalogs for Mobs, Items, Quests, Shops, Guilds, etc. would go here
+        [JsonIgnore] public Catalog<string, Item> ItemCatalog { get; private set; } = [];
+        [JsonIgnore] public Catalog<string, Armor> ArmorCatalog { get; private set; } = [];
+        [JsonIgnore] public Catalog<string, Weapon> WeaponCatalog { get; private set; } = [];
+        [JsonIgnore] public Catalog<string, Mob> MobCatalog { get; private set; } = [];
+        #endregion
+
 
         // TODO: Move this to configuration settings class
         public DebugLevel DebugLevel { get; set; } = DebugLevel.Debug;
@@ -52,23 +70,23 @@ namespace RPGFramework
         /// </summary>
         public DateTime GameDate { get; set; } = new DateTime(2021, 1, 1);
 
-        /// <summary>
-        /// All Players are loaded into this dictionary, with the player's name as the key 
-        /// </summary>
-        [JsonIgnore] public Dictionary<string, Player> Players { get; set; } = new Dictionary<string, Player>();
-
         // Move starting area/room to configuration settings
         public int StartAreaId { get; set; } = 0;
         public int StartRoomId { get; set; } = 0;
 
-        public TelnetServer? TelnetServer { get; private set; }
+
 
         #endregion --- Properties ---
 
         #region --- Methods ---
         private GameState()
         {
-
+            // Add all catalogs to the Catalogs list
+            // this will make sure they get loaded/saved automatically
+            Catalogs.Add(ArmorCatalog);
+            Catalogs.Add(ItemCatalog);
+            Catalogs.Add(MobCatalog);
+            Catalogs.Add(WeaponCatalog);
         }
 
         public void AddPlayer(Player player)
@@ -111,6 +129,16 @@ namespace RPGFramework
             }
         }
 
+        #region LoadAllCatalogs Method
+        private async Task LoadAllCatalogs()
+        {
+            foreach (ICatalog catalog in Catalogs)
+            {
+                await catalog.LoadCatalogAsync();
+            }
+        }
+        #endregion
+
         /// <summary>
         /// Loads all player data from persistent storage and adds each player 
         /// to the <see cref="Players"/> collection.
@@ -145,6 +173,16 @@ namespace RPGFramework
         {
             return Persistence.SaveAreasAsync(Areas.Values);
         }
+
+        #region SaveAllCatalogs Method
+        public async Task SaveAllCatalogs()
+        {
+            foreach (ICatalog catalog in Catalogs)
+            {
+                await catalog.SaveCatalogAsync();
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Saves all player data asynchronously.
@@ -196,12 +234,7 @@ namespace RPGFramework
 
             await LoadAllAreas();
             await LoadAllPlayers();
-
-            // Load Item (Weapon/Armor/Consumable/General) catalogs
-            // Load NPC (Mobs/Shop/Guild/Quest) catalogs
-
-
-
+            await LoadAllCatalogs();
 
             // TODO: Consider moving thread methods to their own class
 
@@ -237,6 +270,7 @@ namespace RPGFramework
         {               
             await SaveAllPlayers(includeOffline: true);         
             await SaveAllAreas();
+            await SaveAllCatalogs();
 
             foreach (var player in Players.Values.Where(p => p.IsOnline))
             {
@@ -283,6 +317,7 @@ namespace RPGFramework
                 {
                     await SaveAllPlayers();
                     await SaveAllAreas();
+                    await SaveAllCatalogs();
 
                     GameState.Log(DebugLevel.Info, "Autosave complete.");
                 }
