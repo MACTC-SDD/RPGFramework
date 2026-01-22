@@ -9,11 +9,11 @@ namespace RPGFramework.Commands
     {
         public static List<ICommand> GetAllCommands()
         {
-            return new List<ICommand>
-            {
+            return
+            [
                 new RoomBuilderCommand(),
                 // Add more builder commands here as needed
-            };
+            ];
         }
     }
 
@@ -24,7 +24,7 @@ namespace RPGFramework.Commands
     {
         public string Name => "/room";
 
-        public IEnumerable<string> Aliases => Array.Empty<string>();
+        public IEnumerable<string> Aliases => [];
 
         public bool Execute(Character character, List<string> parameters)
         {

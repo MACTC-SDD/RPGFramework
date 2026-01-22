@@ -6,11 +6,11 @@ namespace RPGFramework.Commands
     {
         public static List<ICommand> GetAllCommands()
         {
-            return new List<ICommand>
-            {
+            return
+            [
                 new TestItemSizeCommand(),
                 // Add more test commands here as needed
-            };
+            ];
         }
     }
 
@@ -28,7 +28,7 @@ namespace RPGFramework.Commands
         public string Name => "example";
 
         // These are the aliases that can also be used to execute this command. This can be empty.
-        public IEnumerable<string> Aliases => new List<string>() { "ex" };
+        public IEnumerable<string> Aliases => ["ex"];
 
         // What will happen when the command is executed
         public bool Execute(Character character, List<string> parameters)
@@ -54,14 +54,14 @@ namespace RPGFramework.Commands
     internal class TestItemSizeCommand : ICommand
     {
         public string Name => "testitemsize";
-        public IEnumerable<string> Aliases => new List<string>() { };
+        public IEnumerable<string> Aliases => [];
         public bool Execute(Character character, List<string> parameters)
         {
             long startMem = GC.GetTotalMemory(true);
-            List<Item> items = new List<Item>();
+            List<Item> items = [];
             for (int i = 0; i < 100000; i++)
             {
-                Item item = new Item
+                Item item = new()
                 {
                     Id = i,
                     Name = "Item " + i,

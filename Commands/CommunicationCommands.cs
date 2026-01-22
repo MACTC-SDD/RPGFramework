@@ -7,10 +7,10 @@ namespace RPGFramework.Commands
     {
         public static List<ICommand> GetAllCommands()
         {
-            return new List<ICommand>
-            {
+            return
+            [
                 // Add other communication commands here as they are implemented
-            };
+            ];
         }
 
 
@@ -19,7 +19,7 @@ namespace RPGFramework.Commands
     internal class SocialCommand : ICommand
     {
         public string Name => "ip";
-        public IEnumerable<string> Aliases => new List<string> { };
+        public IEnumerable<string> Aliases => [];
         public bool Execute(Character character, List<string> parameters)
         {
             if (character is Player player)

@@ -9,12 +9,12 @@ namespace RPGFramework.Commands
     {
         public static List<ICommand> GetAllCommands()
         {
-            return new List<ICommand>
-            {
+            return
+            [
                 new MapCommand(),
                 new MoveCommand(),
                 // Add more navigation commands here as needed
-            };
+            ];
         }
     }
 
@@ -27,7 +27,7 @@ namespace RPGFramework.Commands
     {
         public string Name => "map";
 
-        public IEnumerable<string> Aliases => new List<string> { };
+        public IEnumerable<string> Aliases => [];
 
         public bool Execute(Character character, List<string> parameters)
         {
@@ -47,15 +47,15 @@ namespace RPGFramework.Commands
     internal class MoveCommand : ICommand
     {
         public string Name => "move";
-        public IEnumerable<string> Aliases => new List<string> 
-        {
+        public IEnumerable<string> Aliases =>
+        [
             "n", "north",
             "e", "east",
             "s", "south",
             "w", "west",
             "u", "up",
             "d", "down"      
-        };
+        ];
 
         public bool Execute(Character character, List<string> parameters)
         {
@@ -69,7 +69,7 @@ namespace RPGFramework.Commands
             }
 
             // Get direction from last parameter (in case they used 'move north' or just 'north')
-            string directionStr = parameters[parameters.Count-1].ToLower();
+            string directionStr = parameters[^1].ToLower();
             Direction? direction = directionStr switch
             {
                 "n" or "north" => Direction.North,

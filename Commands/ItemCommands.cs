@@ -6,11 +6,11 @@ namespace RPGFramework.Commands
     {
         public static List<ICommand> GetAllCommands()
         {
-            return new List<ICommand>
-            {
+            return
+            [
                 
-                // Add more builder commands here as needed
-            };
+                // Add more item commands here as needed
+            ];
         }
     }
 }

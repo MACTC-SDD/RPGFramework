@@ -26,8 +26,8 @@ namespace RPGFramework
         public int MaxHealth { get; protected set; } = 0;
         public string Name { get; set; } = "";
         public int XP { get; protected set; } = 0;
-        public CharacterClass Class { get; set; } = new CharacterClass();
-        public List<Armor> EquippedArmor { get; set; } = new List<Armor>();
+        public CharacterClass Class { get; set; } = new();
+        public List<Armor> EquippedArmor { get; set; } = [];
         public Weapon PrimaryWeapon { get; set; }
         #endregion
 
@@ -44,7 +44,7 @@ namespace RPGFramework
         public Character()
         {
             Health = MaxHealth;
-            Weapon w = new Weapon() 
+            Weapon w = new() 
               { Damage = 2, Description = "A fist", Name = "Fist", Value = 0, Weight = 0 };
             PrimaryWeapon = w;
         }

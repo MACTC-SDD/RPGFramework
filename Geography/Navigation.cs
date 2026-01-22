@@ -16,14 +16,13 @@ namespace RPGFramework.Geography
         public static void Move(Character character, Direction direction)
         {
             Room currentRoom = character.GetRoom();
-            Exit exit = currentRoom.GetExits().FirstOrDefault(e => e.ExitDirection == direction);
+            Exit? exit = currentRoom.GetExits().FirstOrDefault(e => e.ExitDirection == direction);
 
             // If invalid exit, send error message (if player)
             if (exit == null)
             {
-                if (character is Player)
+                if (character is Player p)
                 {
-                    Player p = (Player)character;
                     p.WriteLine("You can't go that way.");
                 }
                 return;
