@@ -28,19 +28,19 @@ public sealed class TelnetConnection
     private const byte OPT_SGA = 3;
     private const byte OPT_NAWS = 31;
 
-    private readonly List<byte> _lineBuffer = new List<byte>(256);
+    private readonly List<byte> _lineBuffer = new(256);
 
     private enum State { Data, Iac, IacCommand, SubNegotiation, SubIac, AnsiEscape }
     private State _state = State.Data;
     private byte _pendingCommand;
     private byte _subOption;
-    private readonly List<byte> _subData = new List<byte>(32);
+    private readonly List<byte> _subData = new(32);
 
     public int? TerminalWidth { get; private set; }
     public int? TerminalHeight { get; private set; }
 
     public string CurrentLineText =>
-    _encoding.GetString(_lineBuffer.ToArray());
+    _encoding.GetString([.. _lineBuffer]);
 
     public Action? OnlineCommitted; // Invoked when a full line is entered.
 
@@ -143,7 +143,7 @@ public sealed class TelnetConnection
 
                 if (b == (byte)'\n')
                 {
-                    line = _encoding.GetString(_lineBuffer.ToArray());
+                    line = _encoding.GetString([.. _lineBuffer]);
                     ClearCurrentLine();
 
                     OnlineCommitted?.Invoke();
@@ -328,7 +328,7 @@ public sealed class TelnetConnection
 
     private void SendIac(byte command, byte option)
     {
-        byte[] msg = new byte[] { IAC, command, option };
+        byte[] msg = [IAC, command, option];
         _stream.Write(msg, 0, msg.Length);
     }
 }

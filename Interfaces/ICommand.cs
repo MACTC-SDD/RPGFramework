@@ -14,6 +14,13 @@ namespace RPGFramework.Interfaces
         IEnumerable<string> Aliases { get; }
 
         /// <summary>
+        /// Gets the help text or usage information associated with this instance.
+        /// This is used to generate help entries as well as display help when using
+        /// the command.
+        /// </summary>
+        public string Help { get; }
+
+        /// <summary>
         /// Execute the command.
         /// Returns true if the command was successfully handled.
         /// </summary>

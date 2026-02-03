@@ -22,7 +22,7 @@ namespace RPGFramework
         // This is a good thing if you want to reset everything, like after world files
         // have been updated in data_seed, but be careful as it will wipe out
         // any existing area, room, and catalog (mob, item, etc.) data.
-        private bool _OVERWRITE_DATA = false;
+        private readonly bool _OVERWRITE_DATA = false;
 
         // Static Fields and Properties
         private static readonly Lazy<GameState> _instance = new(() => new GameState());
@@ -41,7 +41,7 @@ namespace RPGFramework
         private CancellationTokenSource? _timeOfDayCts;
         private Task? _timeOfDayTask;
 
-        private int _logSuppressionSeconds = 30;
+        private readonly int _logSuppressionSeconds = 30;
 
         #endregion
 
@@ -63,10 +63,11 @@ namespace RPGFramework
         [JsonIgnore] public List<ICatalog> Catalogs { get; private set; } = [];
 
         // Catalogs for Mobs, Items, Quests, Shops, Guilds, etc. would go here
-        [JsonIgnore] public Catalog<string, Item> ItemCatalog { get; private set; } = [];
         [JsonIgnore] public Catalog<string, Armor> ArmorCatalog { get; private set; } = [];
-        [JsonIgnore] public Catalog<string, Weapon> WeaponCatalog { get; private set; } = [];
+        [JsonIgnore] public Catalog<string, HelpEntry> HelpCatalog {  get; private set; } = [];
+        [JsonIgnore] public Catalog<string, Item> ItemCatalog { get; private set; } = [];
         [JsonIgnore] public Catalog<string, Mob> MobCatalog { get; private set; } = [];
+        [JsonIgnore] public Catalog<string, Weapon> WeaponCatalog { get; private set; } = [];
         #endregion
 
 
@@ -92,6 +93,7 @@ namespace RPGFramework
             // Add all catalogs to the Catalogs list
             // this will make sure they get loaded/saved automatically
             Catalogs.Add(ArmorCatalog);
+            Catalogs.Add(HelpCatalog);
             Catalogs.Add(ItemCatalog);
             Catalogs.Add(MobCatalog);
             Catalogs.Add(WeaponCatalog);

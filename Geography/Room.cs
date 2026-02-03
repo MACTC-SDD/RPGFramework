@@ -5,30 +5,22 @@ namespace RPGFramework.Geography
 {
     internal class Room
     {
-        #region --- Properties ---
-        // Unique identifier for the room
-        public int Id { get; set; } = 0;
-
-        // What area this belongs to 
-        public int AreaId { get; set; } = 0;
-
-        // Description of the room
-        public string Description { get; set; } = "";
-
-        // Icon to display on map
-        public string MapIcon { get; set; } = DisplaySettings.RoomMapIcon;
-        public string MapColor { get; set; } = DisplaySettings.RoomMapIconColor;
-
-        // Name of the room
-        public string Name { get; set; } = "";
-       
-        public List<string> Tags { get; set; } = new List<string>(); // (for scripting or special behavior)
-
-        // List of exits from the room
-        public List<int> ExitIds { get; set; } = new List<int>();
+        #region --- Properties ---        
+        public int Id { get; set; } = 0; // Unique identifier for the room
+        public int AreaId { get; set; } = 0;   // What area this belongs to 
+        public string Description { get; set; } = "";  // Description of the room        
+        public List<int> ExitIds { get; set; } = []; // List of exits from the room
+        public string MapIcon { get; set; } = DisplaySettings.RoomMapIcon; // Icon to display on map
+        public string MapColor { get; set; } = DisplaySettings.RoomMapIconColor; // Color to show on map
+        public int MaxMobs { get; set; } = 1;  // Maximum number of mobs allowed in the room
+        public List<Mob> Mobs { get; set; } = []; // Mobs in the room        
+        public string Name { get; set; } = "";  // Name of the room
+        public List<string> Tags { get; set; } = []; // (for scripting or special behavior)        
         #endregion --- Properties ---
 
         #region --- Methods ---
+
+        #region AddExits Method
         /// <summary>
         /// This is for creating a new exit (and return exit), not linking existing exit items.
         /// </summary>
@@ -55,29 +47,35 @@ namespace RPGFramework.Geography
             }
 
             // Create a new Exit object from this room
-            Exit exit = new Exit();
-            exit.Id = Exit.GetNextId(AreaId);
-            exit.SourceRoomId = Id;
-            exit.DestinationRoomId = destinationRoom.Id;
-            exit.ExitDirection = direction;
-            exit.Description = exitDescription;
+            Exit exit = new()
+            {
+                Id = Exit.GetNextId(AreaId),
+                SourceRoomId = Id,
+                DestinationRoomId = destinationRoom.Id,
+                ExitDirection = direction,
+                Description = exitDescription
+            };
             ExitIds.Add(exit.Id);
             GameState.Instance.Areas[AreaId].Exits.Add(exit.Id, exit);
 
             // Create a new exit from the destination room back to this room
             if (returnExit)
             {
-                Exit exit1 = new Exit();
-                exit1.Id = Exit.GetNextId(destinationRoom.AreaId);
-                exit1.SourceRoomId = destinationRoom.Id;
-                exit1.DestinationRoomId = Id;
-                exit1.ExitDirection = Navigation.GetOppositeDirection(direction);
+                Exit exit1 = new()
+                {
+                    Id = Exit.GetNextId(destinationRoom.AreaId),
+                    SourceRoomId = destinationRoom.Id,
+                    DestinationRoomId = Id,
+                    ExitDirection = Navigation.GetOppositeDirection(direction)
+                };
                 exit1.Description = exitDescription.Replace(direction.ToString(), exit1.ExitDirection.ToString());
                 destinationRoom.ExitIds.Add(exit1.Id);
                 GameState.Instance.Areas[destinationRoom.AreaId].Exits.Add(exit1.Id, exit1);
             }
         }
+        #endregion
 
+        #region CreateRoom Methods
         /// <summary>
         /// Create a new room object in specified area and add it to GameState Area
         /// </summary>
@@ -86,10 +84,12 @@ namespace RPGFramework.Geography
         /// <returns></returns>
         public static Room CreateRoom(int areaId, string name, string description)
         {
-            Room room = new Room();
-            room.Id = GetNextId(areaId);
-            room.Name = name;
-            room.Description = description;
+            Room room = new()
+            {
+                Id = GetNextId(areaId),
+                Name = name,
+                Description = description
+            };
             GameState.Instance.Areas[areaId].Rooms.Add(room.Id, room);
 
             return room;
@@ -99,7 +99,9 @@ namespace RPGFramework.Geography
         {
             return CreateRoom(area.Id, name, description);
         }
+        #endregion
 
+        #region DeleteRoom Methods
         /// <summary>
         /// Delete a room (and its linked exits) from the specified area
         /// </summary>
@@ -111,8 +113,9 @@ namespace RPGFramework.Geography
             GameState.Instance.Areas[areaId].Rooms.Remove(roomId);
 
             // Remove all exits from the room
-            List<Exit> exits = GameState.Instance.Areas[areaId].Exits.Values
-                .Where(e => e.SourceRoomId == roomId || e.DestinationRoomId == roomId).ToList();
+            List<Exit> exits = [.. GameState.Instance.Areas[areaId].Exits.Values
+                .Where(e => (e.SourceRoomId == roomId && e.SourceAreaId == areaId) 
+                || (e.DestinationRoomId == roomId && e.DestinationAreaId == areaId))];
 
             foreach (Exit e in exits)
             {
@@ -124,7 +127,9 @@ namespace RPGFramework.Geography
         {
             DeleteRoom(room.AreaId, room.Id);
         }
+        #endregion
 
+        #region GetExits Methods
         /// <summary>
         /// Return a list of Exit objects that are in this room.
         /// </summary>
@@ -133,8 +138,8 @@ namespace RPGFramework.Geography
         {
             // This works just like the loop in GetPlaysersInRoom, but is shorter
             // This style of list maniuplation is called "LINQ"
-            return GameState.Instance.Areas[AreaId].Exits.Values
-                .Where(e => e.SourceRoomId == Id).ToList();
+            return [.. GameState.Instance.Areas[AreaId].Exits.Values
+                .Where(e => e.SourceRoomId == Id)];
         }
 
         /// <summary>
@@ -155,7 +160,9 @@ namespace RPGFramework.Geography
         {
             return GetExits().Find(e => e.Id == id);
         }
+        #endregion
 
+        #region GetNextId Method (Static)
         /// <summary>
         /// Get the next available room ID for the specified area.
         /// </summary>
@@ -170,19 +177,9 @@ namespace RPGFramework.Geography
 
             return GameState.Instance.Areas[areaId].Rooms.Keys.Max() + 1;
         }
+        #endregion
 
-        /// <summary>
-        /// Return a list of Player objects that are in this room.
-        /// </summary>
-        /// <note>
-        /// We have both an instance method (GetPlayers) and a static method (GetPlayersInRoom) that do the same thing.
-        /// </note>
-        /// <returns></returns>
-        public List<Player> GetPlayers()
-        {
-            return GetPlayersInRoom(this);
-        }
-
+        #region GetPlayersInRoom Method (Static)
         /// <summary>
         /// Return a list of player objects that are in the specified room
         /// </summary>
@@ -191,23 +188,18 @@ namespace RPGFramework.Geography
         public static List<Player> GetPlayersInRoom(Room room)
         {
             // Loop through GameState.ConnectedPlayers and return a list of players in the room
-            List<Player> playersInRoom = new List<Player>();
-            foreach (Player p in GameState.Instance.Players.Values)
-            {
-                if (p.IsOnline 
+            List<Player> playersInRoom = [];
+            return [.. GameState.Instance.Players.Values
+                .Where(p => p.IsOnline 
                     && p.AreaId == room.AreaId 
-                    && p.LocationId == room.Id)
-                {
-                    playersInRoom.Add(p);
-                }
-            }
-
-            return playersInRoom;
+                    && p.LocationId == room.Id)];
         }
+        #endregion
+
         #endregion --- Methods ---
 
         #region --- Methods (Events) ---
-        
+
         /// <summary>
         /// When a character enters a room, do this.
         /// </summary>
@@ -215,7 +207,7 @@ namespace RPGFramework.Geography
         public void EnterRoom(Character character, Room fromRoom)
         {
             // Send a message to the player
-            if (character is Player) ((Player)character).WriteLine(Description);
+            Comm.SendToIfPlayer(character, Description);
 
             // Send a message to all players in the room
             Comm.SendToRoomExcept(this, $"{character.Name} enters the room.", character);

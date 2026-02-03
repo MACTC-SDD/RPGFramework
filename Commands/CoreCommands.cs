@@ -23,14 +23,15 @@ namespace RPGFramework.Commands
                 // Add other core commands here as they are implemented
             ];
         }
-
-
     }
 
+    #region AFKCommand Class
     internal class AFKCommand : ICommand
     {
         public string Name => "afk";
         public IEnumerable<string> Aliases => [];
+        public string Help => "Usage: afk\n" +
+            "Toggles your Away From Keyboard (AFK) status.";
         public bool Execute(Character character, List<string> parameters)
         {
             if (character is Player player)
@@ -42,11 +43,15 @@ namespace RPGFramework.Commands
             return false;
         }
     }
+    #endregion
 
+    #region IpCommand Class
     internal class IpCommand : ICommand
     {
         public string Name => "ip";
         public IEnumerable<string> Aliases => [];
+        public string Help => "Usage: ip\n" +
+            "Displays your current IP address.";
         public bool Execute(Character character, List<string> parameters)
         {
             if (character is Player player)
@@ -57,11 +62,15 @@ namespace RPGFramework.Commands
             return false;
         }
     }
+    #endregion
 
+    #region LookCommand Class
     internal class LookCommand : ICommand
     {
         public string Name => "look";
         public IEnumerable<string> Aliases => [ "l" ];
+        public string Help => "Usage: look\n" +
+            "Displays the description of your current location and its exits.";
         public bool Execute(Character character, List<string> parameters)
         {
             if (character is Player player)
@@ -78,11 +87,15 @@ namespace RPGFramework.Commands
             return false;
         }
     }
+    #endregion
 
+    #region QuitCommand Class
     internal class QuitCommand : ICommand
     {
         public string Name => "quit";
         public IEnumerable<string> Aliases => [ "exit" ];
+        public string Help => "Usage: quit\n" +
+            "Logs you out of the game.";
 
         public bool Execute(Character character, List<string> parameters)
         {
@@ -94,11 +107,15 @@ namespace RPGFramework.Commands
             return false;
         }
     }
+    #endregion
 
+    #region SayCommand Class
     internal class SayCommand : ICommand
     {
         public string Name => "say";
         public IEnumerable<string> Aliases => ["\"".Normalize(), "'".Normalize()];
+        public string Help => "Usage: say <message>\n" +
+            "Sends a message to all characters in the same room.";
         public bool Execute(Character character, List<string> parameters)
         {
             // If no message and it's a player, tell them to say something
@@ -111,11 +128,15 @@ namespace RPGFramework.Commands
             return true;
         }
     }
+    #endregion
 
+    #region TimeCommand Class
     internal class TimeCommand : ICommand
     {
         public string Name => "time";
         public IEnumerable<string> Aliases => [];
+        public string Help => "Usage: time\n" +
+            "Displays the current in-game time.";
         public bool Execute(Character character, List<string> parameters)
         {
             if (character is Player player)
@@ -126,6 +147,6 @@ namespace RPGFramework.Commands
             return false;
         }
     }
-
+    #endregion
 
 }

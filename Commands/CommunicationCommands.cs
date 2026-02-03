@@ -18,13 +18,15 @@ namespace RPGFramework.Commands
 
     internal class SocialCommand : ICommand
     {
-        public string Name => "ip";
+        public string Name => "soc";
         public IEnumerable<string> Aliases => [];
+        public string Help => "Usage: <social> [[<target>]]\n" +
+            "Do something silly..";
         public bool Execute(Character character, List<string> parameters)
         {
             if (character is Player player)
             {
-                player.WriteLine($"Your IP address is {player.GetIPAddress()}");
+                player.WriteLine($"Not Yet Implemented!");
                 return true;
             }
             return false;

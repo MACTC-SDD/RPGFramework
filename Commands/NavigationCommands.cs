@@ -28,6 +28,8 @@ namespace RPGFramework.Commands
         public string Name => "map";
 
         public IEnumerable<string> Aliases => [];
+        public string Help => "Usage: map\n" +
+            "Displays the local map of your surroundings.";
 
         public bool Execute(Character character, List<string> parameters)
         {
@@ -56,7 +58,9 @@ namespace RPGFramework.Commands
             "u", "up",
             "d", "down"      
         ];
-
+        public string Help => "Usage: move <direction>\n" +
+            "Move in the specified direction (north, east, south, west, up, down).\n" +
+            "You can also just use the direction or abbreviation (north, n, south, s, etc.)";
         public bool Execute(Character character, List<string> parameters)
         {
             if (parameters == null || parameters.Count == 0)

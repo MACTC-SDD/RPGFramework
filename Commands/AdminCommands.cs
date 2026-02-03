@@ -22,8 +22,10 @@ namespace RPGFramework.Commands
 
     internal class AnnounceCommand : ICommand
     {
-        public string Name => "announce";
-        public IEnumerable<string> Aliases => [ "ann" ];
+        public string Name => "/announce";
+        public IEnumerable<string> Aliases => [ "/ann" ];
+        public string Help => "Usage: /announce <message>\n" +
+            "Broadcasts an announcement to all players.";
         public bool Execute(Character character, List<string> parameters)
         {
             Comm.Broadcast($"{DisplaySettings.AnnouncementColor}[[Announcement]]: [/][white]" + 
@@ -37,6 +39,8 @@ namespace RPGFramework.Commands
     {
         public string Name => "/reloadseeddata";
         public IEnumerable<string> Aliases => [];
+        public string Help => "Usage: /reloadseeddata\n" +
+            "Reloads the default seed data, overwriting current data. DANGER!";
         public bool Execute(Character character, List<string> parameters)
         {
             if (character is not Player player)
@@ -59,6 +63,8 @@ namespace RPGFramework.Commands
     {
         public string Name => "shutdown";
         public IEnumerable<string> Aliases => [];
+        public string Help => "Usage: shutdown\n" +
+            "Shuts down the server safely, saving all data.";
         public bool Execute(Character character, List<string> parameters)
         {
             Comm.Broadcast($"{DisplaySettings.AnnouncementColor}[[WARNING]]: [/][white]" +

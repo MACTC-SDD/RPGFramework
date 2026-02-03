@@ -6,12 +6,14 @@ namespace RPGFramework.Geography
     {
         #region --- Properties ---
         public int Id { get; set; } = 0;
+        public int DestinationAreaId { get; set; }
+        public int DestinationRoomId { get; set; }
         public Direction ExitDirection { get; set; }
         public ExitType ExitType { get; set; } = ExitType.Open;
         public string Name { get; set; } = "";
         public string Description { get; set; } = "";
+        public int SourceAreaId { get; set; }
         public int SourceRoomId { get; set; }
-        public int DestinationRoomId { get; set; }
         #endregion
 
         /// <summary>

@@ -28,16 +28,18 @@ namespace RPGFramework.Commands
         public string Name => "example";
 
         // These are the aliases that can also be used to execute this command. This can be empty.
-        public IEnumerable<string> Aliases => ["ex"];
+        public IEnumerable<string> Aliases => [];
+        public string Help => "Usage: example\n" +
+            "This is an example command that does nothing significant.";
 
         // What will happen when the command is executed
         public bool Execute(Character character, List<string> parameters)
         {
-            // A lot of times we want to make sure it's a Player issuing the command, but not always
-            if (character is Player player)
-            {
-                player.WriteLine("This is an example command.");
-            }
+            if (character is not Player player)
+                return false;
+
+
+            player.WriteLine("This is an example command.");
 
             // If the command failed to run for some reason, return false
             return true;
@@ -55,6 +57,8 @@ namespace RPGFramework.Commands
     {
         public string Name => "testitemsize";
         public IEnumerable<string> Aliases => [];
+        public string Help => "Usage: testitemsize\n" +
+            "Creates 100,000 Item instances and reports memory usage statistics.";
         public bool Execute(Character character, List<string> parameters)
         {
             long startMem = GC.GetTotalMemory(true);

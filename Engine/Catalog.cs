@@ -66,7 +66,7 @@ namespace RPGFramework
         {
             get
             {
-                if (!_items.TryGetValue((TKey)key, out var value))
+                if (!_items.TryGetValue((TKey)key, out var value) || value == null)
                 {
                     throw new KeyNotFoundException($"The key '{key}' was not found in the catalog.");
                 }
@@ -101,6 +101,7 @@ namespace RPGFramework
         }
         #endregion
 
+        // TODO: Create a string key version of ContainsKey that does case-insensitive key lookup for string keys
         public bool ContainsKey(TKey key) => _items.ContainsKey(key);
 
         public bool ContainsKey(object key) => _items.ContainsKey((TKey)key);
@@ -132,6 +133,7 @@ namespace RPGFramework
         }
         #endregion
 
+        // TODO: Create a string key version of Remove that does case-insensitive key removal for string keys
         public bool Remove(TKey key) => _items.Remove(key);
         public bool Remove(object key) => _items.Remove((TKey)key);
 

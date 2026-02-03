@@ -25,6 +25,11 @@ namespace RPGFramework.Commands
         public string Name => "/room";
 
         public IEnumerable<string> Aliases => [];
+        public string Help => "Room building and editing commands.\n" +
+            "/room set <property> '<value>'\n" +
+            "/room create '<>'\n" +
+            "/room delete\n" +
+            "/room list\n";
 
         public bool Execute(Character character, List<string> parameters)
         {

@@ -13,7 +13,7 @@ namespace RPGFramework
 
         public int Level { get; set; } = 0;
         public string Name { get; set; } = "";
-        List<string> Tags { get; set; } = new List<string>();
+        List<string> Tags { get; set; } = [];
         public int UsesRemaining { get; set; } = -1; // -1 means unlimited uses
         public double Value { get; set; } = 0;
         public double Weight { get; set; } = 0;

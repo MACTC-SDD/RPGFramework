@@ -24,13 +24,16 @@ namespace RPGFramework
         public PlayerRole PlayerRole { get; set; }
         #endregion
 
+        #region DisplayName Method
         public string DisplayName()
         {
             // We could add colors and other things later, for now, just afk
             return Name + (IsAFK ? " (AFK)" : "");
 
         }
+        #endregion
 
+        #region Exists Method (Static)
         /// <summary>
         /// Checks if a player with the specified name exists in the provided dictionary. This is case-insensitive!
         /// That is why we don't just use players.ContainsKey.
@@ -43,43 +46,9 @@ namespace RPGFramework
             // Check dictionary keys in a case-insensitive manner
             return players.Keys.Any(name => string.Equals(name, playerName, StringComparison.OrdinalIgnoreCase));
         }
+        #endregion
 
-        /// <summary>
-        /// Searches for a player by name in the specified collection and returns the corresponding player if found.
-        /// This search is case-insensitive, which is why we should use this method instead of directly accessing the dictionary.
-        /// </summary>
-        /// <param name="playerName">The name of the player to locate. The comparison is case-insensitive.</param>
-        /// <param name="players">A dictionary containing player names as keys and their corresponding Player objects as values. Cannot be
-        /// null. This will usually be GameState.Instance.Players in our case.</param>
-        /// <returns>The Player object associated with the specified name if found; otherwise, null.</returns>
-        public static Player? FindPlayer(string playerName, Dictionary<string, Player> players)
-        {
-            foreach (var kvp in players)
-            {
-                if (string.Equals(kvp.Key, playerName, StringComparison.OrdinalIgnoreCase))
-                {
-                    return kvp.Value;
-                }
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Attempts to find a player with the specified name in the provided collection.
-        /// </summary>
-        /// <param name="playerName">The name of the player to locate. Cannot be null.</param>
-        /// <param name="players">A dictionary containing player names as keys and corresponding <see cref="Player"/> objects as values.
-        /// Cannot be null.</param>
-        /// <param name="player">When this method returns, contains the <see cref="Player"/> object associated with the specified name, if
-        /// found;</param>
-        /// <returns><see langword="true"/> if a player with the specified name is found; otherwise, <see langword="false"/>.</returns>
-        public static bool TryFindPlayer(string playerName, Dictionary<string, Player> players, out Player? player)
-        {
-            player = FindPlayer(playerName, players);
-            return player != null;
-        }
-
-
+        #region Login/Logout Methods
         /// <summary>
         /// Things that should happen when a player logs in.
         /// </summary>
@@ -103,7 +72,9 @@ namespace RPGFramework
             WriteLine("Bye!");
             Network?.Client.Close();
         }
+        #endregion
 
+        #region Save Method
         /// <summary>
         /// Save the player to the database.
         /// </summary>
@@ -111,7 +82,9 @@ namespace RPGFramework
         {
             GameState.Instance.SavePlayer(this);
         }
+        #endregion
 
+        #region SetPassword Method
         /// <summary>
         /// Sets the password to the specified value.
         /// </summary>
@@ -123,6 +96,27 @@ namespace RPGFramework
             Password = newPassword;
             return true;
         }
+        #endregion
+
+        #region TryFindPlayer Method (Static)
+        /// <summary>
+        /// Attempts to find a player with the specified name in the provided collection.
+        /// </summary>
+        /// <param name="playerName">The name of the player to locate. Cannot be null.</param>
+        /// <param name="players">A dictionary containing player names as keys and corresponding <see cref="Player"/> objects as values.
+        /// Cannot be null.</param>
+        /// <param name="player">When this method returns, contains the <see cref="Player"/> object associated with the specified name, if
+        /// found;</param>
+        /// <returns><see langword="true"/> if a player with the specified name is found; otherwise, <see langword="false"/>.</returns>
+        public static bool TryFindPlayer(string playerName, Dictionary<string, Player> players, out Player? player)
+        {
+            player = players.Values.Where(o => string.Equals(o.Name, playerName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+
+            return player != null;
+        }
+        #endregion
+
+        #region Write/WriteLine Methods
         public void Write(string message)
         {
             WriteNewLineIfNeeded();
@@ -164,7 +158,7 @@ namespace RPGFramework
                 Console?.Write("\r\n");
             }
         }
+        #endregion
     }
-
 
 }
