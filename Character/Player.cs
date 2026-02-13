@@ -64,10 +64,14 @@ namespace RPGFramework
         /// </summary>
         public void Logout()
         {
+            if (!IsOnline)
+                return; // Player is already logged out, so do nothing
+
             TimeSpan duration = DateTime.Now - LastLogin;
             PlayTime += duration;
             IsOnline = false;            
             Save();
+
 
             WriteLine("Bye!");
             Network?.Client.Close();
@@ -119,18 +123,36 @@ namespace RPGFramework
         #region Write/WriteLine Methods
         public void Write(string message)
         {
-            WriteNewLineIfNeeded();
-            Console?.Write(message);
-            var line = Network?.TelnetConnection?.CurrentLineText;
-            Console?.Write(line ?? String.Empty); // Re-write current input line
+            try
+            {
+                WriteNewLineIfNeeded();
+                Console?.Write(message);
+                var line = Network?.TelnetConnection?.CurrentLineText;
+                Console?.Write(line ?? String.Empty); // Re-write current input line
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                GameState.Log(Enums.DebugLevel.Error, $"Error sending message to player {Name}: {ex.Message}");
+                Logout(); // Log the player out if we can't send messages to them, as this likely means their connection is lost
+            }
         }
 
         public void Write(IRenderable renderable)
-        { 
-            WriteNewLineIfNeeded();
-            Console?.Write(renderable);
-            var line = Network?.TelnetConnection?.CurrentLineText;
-            Console?.Write(line ?? String.Empty); // Re-write current input line
+        {
+            try
+            {
+                WriteNewLineIfNeeded();
+                Console?.Write(renderable);
+                var line = Network?.TelnetConnection?.CurrentLineText;
+                Console?.Write(line ?? String.Empty); // Re-write current input line
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                GameState.Log(Enums.DebugLevel.Error, $"Error sending message to player {Name}: {ex.Message}");
+                Logout(); // Log the player out if we can't send messages to them, as this likely means their connection is lost
+            }
         }
 
         
@@ -141,21 +163,39 @@ namespace RPGFramework
         /// p formatting supported by the output system.</param>
         public void WriteLine(string message)
         {
-            WriteNewLineIfNeeded();
-            Console?.MarkupLine(message);
-            var line = Network?.TelnetConnection?.CurrentLineText;
-            Console?.Write(line ?? String.Empty); // Re-write current input line
+            try
+            {
+                WriteNewLineIfNeeded();
+                Console?.MarkupLine(message);
+                var line = Network?.TelnetConnection?.CurrentLineText;
+                Console?.Write(line ?? String.Empty); // Re-write current input line
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                GameState.Log(Enums.DebugLevel.Error, $"Error sending message to player {Name}: {ex.Message}");
+                Logout(); // Log the player out if we can't send messages to them, as this likely means their connection is lost
+            }
         }
 
         private void WriteNewLineIfNeeded()
         {
-            if (Network == null)
-                return;
-            if (Network.TelnetConnection == null)
-                return;
-            if (Network.NeedsOutputNewline)
+            try
             {
-                Console?.Write("\r\n");
+                if (Network == null)
+                    return;
+                if (Network.TelnetConnection == null)
+                    return;
+                if (Network.NeedsOutputNewline)
+                {
+                    Console?.Write("\r\n");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                GameState.Log(Enums.DebugLevel.Error, $"Error sending message to player {Name}: {ex.Message}");
+                Logout(); // Log the player out if we can't send messages to them, as this likely means their connection is lost
             }
         }
         #endregion
